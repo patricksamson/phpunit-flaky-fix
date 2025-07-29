@@ -6,7 +6,7 @@ trait ManagesGlobalSeed
 {
     protected static $globalSeed;
 
-    protected function initializeGlobalSeed(): void
+    public function initializeGlobalSeed(): void
     {
         // If the global seed is already initialized, re-seed the random number generator.
         if ($this->isGlobalSeedInitialized()) {
