@@ -1,0 +1,26 @@
+{
+    "name": "patricksamson/phpunit-flaky-fix",
+    "description": "A PHPUnit extension to help reproduce flaky tests.",
+    "type": "library",
+    "keywords": [
+        "phpunit"
+    ],
+    "authors": [
+        {
+            "name": "Patrick Samson",
+            "email": "samson@kirschbaumdevelopment.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "require-dev": {
+        "spatie/ray": "^1.42"
+    },
+    "autoload": {
+        "psr-4": {
+            "PatrickSamson\\PHPUnitFlakyFix\\": "src/"
+        }
+    }
+}
