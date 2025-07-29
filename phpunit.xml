@@ -9,6 +9,10 @@
     failOnRisky="true"
     failOnWarning="true"
 >
+    <extensions>
+        <bootstrap class="PatrickSamson\PHPUnitFlakyFix\FlakyFixExtension" />
+    </extensions>
+
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>

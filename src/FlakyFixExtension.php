@@ -23,6 +23,11 @@ final class FlakyFixExtension implements Extension
 
         $facade->registerSubscriber(new PreparationStartedSubscriber());
 
+        /**
+         * Do not respect the `no-output` configuration for this extension.
+         * This is necessary to work with `php artisan test`, Pest, and Paratest.
+         */
+
         echo PHP_EOL
             . sprintf('Global Seed: %s. To reproduce, run `TEST_SEED=%s php artisan test --filter ...`', self::$globalSeed, self::$globalSeed)
             . PHP_EOL . PHP_EOL;
