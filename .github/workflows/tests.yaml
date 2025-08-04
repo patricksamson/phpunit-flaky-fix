@@ -124,6 +124,16 @@ jobs:
             php-version: "8.4"
             dependencies: "highest"
 
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "lowest"
+            paratest: true
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "highest"
+            paratest: true
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -177,3 +187,9 @@ jobs:
       - name: "Run end-to-end tests with phpunit/phpunit:12.0.0"
         if: "matrix.phpunit-version == '12.0.0'"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml"
+
+      - name: "Run end-to-end tests with Paratest"
+        if: "matrix.paratest == 'true'"
+        run: |
+          composer require brianium/paratest --ansi --no-interaction --no-progress
+          vendor/bin/paratest --configuration=tests/EndToEnd/ParaTest/Usage/Default/phpunit.xml
