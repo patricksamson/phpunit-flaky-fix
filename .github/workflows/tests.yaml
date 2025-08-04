@@ -189,7 +189,7 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version || 'NA' }}-${{ matrix.runner || 'phpunit' }}"
+          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version || 'NA' }}--runner-${{ matrix.runner || 'phpunit' }}-pest-${{ matrix.pest-version || 'NA' }}"
 
       - name: "Run end-to-end tests with PHPUnit 10"
         if: "startsWith(matrix.phpunit-version, '10.')"
@@ -209,7 +209,7 @@ jobs:
 
       - name: "Run end-to-end tests with Pest 2"
         if: "matrix.runner == 'pest'"
-        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest2/phpunit.xml"
 
       - name: "Run end-to-end tests with Pest 3"
         if: "matrix.runner == 'pest'"
