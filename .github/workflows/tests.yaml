@@ -131,14 +131,12 @@ jobs:
             runner: "paratest"
 
           # Pest tests
-          - phpunit-version: "11.0.0"
-            php-version: "8.4"
+          - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
             pest-version: "3.0.0"
 
-          - phpunit-version: "11.0.0"
-            php-version: "8.4"
+          - php-version: "8.4"
             dependencies: "highest"
             runner: "pest"
             pest-version: "3.0.0"
@@ -163,6 +161,7 @@ jobs:
         run: "composer config platform.php --ansi --unset"
 
       - name: "Require phpunit/phpunit:^${{ matrix.phpunit-version }}"
+        if: "matrix.phpunit-version != ''"
         run: "composer require phpunit/phpunit:^${{ matrix.phpunit-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
 
       - name: "Require brianium/paratest"
@@ -177,7 +176,7 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version }}-${{ matrix.runner || 'phpunit' }}"
+          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version || 'NA' }}-${{ matrix.runner || 'phpunit' }}"
 
       - name: "Run end-to-end tests with phpunit/phpunit:10.0.0"
         if: "startsWith(matrix.phpunit-version, '10.')"
