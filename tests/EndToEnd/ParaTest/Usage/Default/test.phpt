@@ -9,6 +9,6 @@ passthru('vendor/bin/paratest --configuration=tests/EndToEnd/ParaTest/Usage/Defa
 --EXPECTF--
 ParaTest %a
 
-Global Seed: %d. To reproduce, run `TEST_SEED=%d php artisan test --filter ...`
+Global Seed: %d. To reproduce, run `FLAKY_SEED=%d php artisan test --filter ...`
 
 %a

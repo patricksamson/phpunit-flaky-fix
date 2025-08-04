@@ -5,10 +5,10 @@ With default configuration of extension
 
 declare(strict_types=1);
 
-passthru('TEST_SEED=1234567890 vendor/bin/paratest --configuration=tests/EndToEnd/ParaTest/Usage/Default/phpunit.xml');
+passthru('FLAKY_SEED=1234567890 vendor/bin/paratest --configuration=tests/EndToEnd/ParaTest/Usage/Default/phpunit.xml');
 --EXPECTF--
 ParaTest %a
 
-Global Seed: 1234567890. To reproduce, run `TEST_SEED=1234567890 php artisan test --filter ...`
+Global Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
 
 %a

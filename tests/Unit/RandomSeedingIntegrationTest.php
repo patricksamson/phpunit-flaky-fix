@@ -19,7 +19,7 @@ final class RandomSeedingIntegrationTest extends TestCase
     protected function tearDown(): void
     {
         $this->cleanupFiles();
-        putenv('TEST_SEED');
+        putenv('FLAKY_SEED');
     }
 
     private function cleanupFiles(): void
@@ -87,7 +87,7 @@ final class RandomSeedingIntegrationTest extends TestCase
 
     public function test_environment_seed_produces_consistent_results(): void
     {
-        putenv('TEST_SEED=999');
+        putenv('FLAKY_SEED=999');
 
         // Initialize with environment seed
         $this->initializeGlobalSeed();

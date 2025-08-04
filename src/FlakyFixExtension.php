@@ -29,7 +29,7 @@ final class FlakyFixExtension implements Extension
          */
 
         echo PHP_EOL
-            . sprintf('Global Seed: %s. To reproduce, run `TEST_SEED=%s php artisan test --filter ...`', self::$globalSeed, self::$globalSeed)
+            . sprintf('Global Seed: %s. To reproduce, run `FLAKY_SEED=%s php artisan test --filter ...`', self::$globalSeed, self::$globalSeed)
             . PHP_EOL . PHP_EOL;
     }
 }

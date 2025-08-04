@@ -97,7 +97,7 @@ trait ManagesGlobalSeed
      */
     public function getSeedFromEnv(): ?int
     {
-        $envSeed = getenv('TEST_SEED');
+        $envSeed = getenv('FLAKY_SEED');
 
         return $envSeed !== false ? (int) $envSeed : null;
     }
