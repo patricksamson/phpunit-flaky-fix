@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PatrickSamson\PHPUnitFlakyFix\Tests\Unit;
 
-use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesGlobalSeed;
+use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesFlakyTestSeed;
 use PHPUnit\Framework\TestCase;
 
 final class ManagesGlobalSeedTest extends TestCase
@@ -16,8 +16,8 @@ final class ManagesGlobalSeedTest extends TestCase
     protected function setUp(): void
     {
         $this->testInstance = new TestClassUsingManagesGlobalSeed();
-        $this->lockFilePath = sys_get_temp_dir() . '/phpunit-global-seed.lock';
-        $this->seedFilePath = sys_get_temp_dir() . '/phpunit-global-seed.txt';
+        $this->lockFilePath = sys_get_temp_dir() . '/phpunit-flaky-seed.lock';
+        $this->seedFilePath = sys_get_temp_dir() . '/phpunit-flaky-seed.txt';
 
         // Clean up any existing files
         $this->cleanupFiles();
@@ -62,29 +62,29 @@ final class ManagesGlobalSeedTest extends TestCase
     {
         // Test when no environment variable is set
         $this->assertFalse($this->testInstance->isSeedProvidedFromEnv());
-        $this->assertNull($this->testInstance->getSeedFromEnv());
+        $this->assertNull($this->testInstance->getFlakySeedFromEnv());
 
         // Test when environment variable is set
         putenv('FLAKY_SEED=12345');
         $this->assertTrue($this->testInstance->isSeedProvidedFromEnv());
-        $this->assertSame(12345, $this->testInstance->getSeedFromEnv());
+        $this->assertSame(12345, $this->testInstance->getFlakySeedFromEnv());
     }
 
     public function test_sets_and_checks_global_seed(): void
     {
-        $this->assertFalse($this->testInstance->isGlobalSeedInitialized());
+        $this->assertFalse($this->testInstance->isFlakySeedInitialized());
 
         $seed = 54321;
-        $this->testInstance->setGlobalSeed($seed);
+        $this->testInstance->setFlakyTestSeed($seed);
 
-        $this->assertTrue($this->testInstance->isGlobalSeedInitialized());
+        $this->assertTrue($this->testInstance->isFlakySeedInitialized());
         $this->assertSame($seed, $this->testInstance->getGlobalSeed());
     }
 
     public function FLAKY_SEEDs_random_number_generator(): void
     {
         $seed = 98765;
-        $this->testInstance->setGlobalSeed($seed);
+        $this->testInstance->setFlakyTestSeed($seed);
 
         // Get a few random numbers
         $random1 = mt_rand();
@@ -102,17 +102,17 @@ final class ManagesGlobalSeedTest extends TestCase
     {
         putenv('FLAKY_SEED=42');
 
-        $this->testInstance->initializeGlobalSeed();
+        $this->testInstance->initializeFlakySeed();
 
-        $this->assertTrue($this->testInstance->isGlobalSeedInitialized());
+        $this->assertTrue($this->testInstance->isFlakySeedInitialized());
         $this->assertSame(42, $this->testInstance->getGlobalSeed());
     }
 
     public function test_initialize_generates_seed_when_no_env_and_no_existing_seed(): void
     {
-        $this->testInstance->initializeGlobalSeed();
+        $this->testInstance->initializeFlakySeed();
 
-        $this->assertTrue($this->testInstance->isGlobalSeedInitialized());
+        $this->assertTrue($this->testInstance->isFlakySeedInitialized());
         $this->assertIsInt($this->testInstance->getGlobalSeed());
         $this->assertGreaterThanOrEqual(0, $this->testInstance->getGlobalSeed());
     }
@@ -120,14 +120,14 @@ final class ManagesGlobalSeedTest extends TestCase
     public function test_initialize_reuses_existing_seed(): void
     {
         $originalSeed = 777;
-        $this->testInstance->setGlobalSeed($originalSeed);
+        $this->testInstance->setFlakyTestSeed($originalSeed);
 
         // Get some random numbers to verify the state
         $random1 = mt_rand();
         $random2 = mt_rand();
 
         // Initialize again - should re-seed but keep the same global seed
-        $this->testInstance->initializeGlobalSeed();
+        $this->testInstance->initializeFlakySeed();
 
         $this->assertSame($originalSeed, $this->testInstance->getGlobalSeed());
 
@@ -163,15 +163,15 @@ final class ManagesGlobalSeedTest extends TestCase
 // Test class that uses the trait for testing purposes
 class TestClassUsingManagesGlobalSeed
 {
-    use ManagesGlobalSeed;
+    use ManagesFlakyTestSeed;
 
     public function getGlobalSeed(): ?int
     {
-        return static::$globalSeed;
+        return static::$flakySeed;
     }
 
     public function resetGlobalSeed(): void
     {
-        static::$globalSeed = null;
+        static::$flakySeed = null;
     }
 }

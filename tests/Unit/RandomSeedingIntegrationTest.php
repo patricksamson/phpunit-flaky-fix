@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PatrickSamson\PHPUnitFlakyFix\Tests\Unit;
 
-use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesGlobalSeed;
+use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesFlakyTestSeed;
 use PHPUnit\Framework\TestCase;
 
 final class RandomSeedingIntegrationTest extends TestCase
 {
-    use ManagesGlobalSeed;
+    use ManagesFlakyTestSeed;
 
     protected function setUp(): void
     {
@@ -40,7 +40,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         $seed = 42;
 
         // First run with the seed
-        $this->setGlobalSeed($seed);
+        $this->setFlakyTestSeed($seed);
         $sequence1 = [
             mt_rand(),
             mt_rand(),
@@ -50,7 +50,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         ];
 
         // Second run with the same seed
-        $this->setGlobalSeed($seed);
+        $this->setFlakyTestSeed($seed);
         $sequence2 = [
             mt_rand(),
             mt_rand(),
@@ -66,7 +66,7 @@ final class RandomSeedingIntegrationTest extends TestCase
     public function test_different_seeds_produce_different_sequences(): void
     {
         // First sequence with seed 100
-        $this->setGlobalSeed(100);
+        $this->setFlakyTestSeed(100);
         $sequence1 = [
             mt_rand(),
             mt_rand(),
@@ -74,7 +74,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         ];
 
         // Second sequence with seed 200
-        $this->setGlobalSeed(200);
+        $this->setFlakyTestSeed(200);
         $sequence2 = [
             mt_rand(),
             mt_rand(),
@@ -90,7 +90,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         putenv('FLAKY_SEED=999');
 
         // Initialize with environment seed
-        $this->initializeGlobalSeed();
+        $this->initializeFlakySeed();
         $sequence1 = [
             mt_rand(),
             mt_rand(),
@@ -98,7 +98,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         ];
 
         // Re-initialize with same environment seed
-        $this->initializeGlobalSeed();
+        $this->initializeFlakySeed();
         $sequence2 = [
             mt_rand(),
             mt_rand(),

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PatrickSamson\PHPUnitFlakyFix;
 
-use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesGlobalSeed;
+use PatrickSamson\PHPUnitFlakyFix\Concerns\ManagesFlakyTestSeed;
 use PHPUnit\Runner\Extension\Extension;
 use PHPUnit\Runner\Extension\Facade;
 use PHPUnit\Runner\Extension\ParameterCollection;
@@ -12,14 +12,14 @@ use PHPUnit\TextUI\Configuration\Configuration;
 
 final class FlakyFixExtension implements Extension
 {
-    use ManagesGlobalSeed;
+    use ManagesFlakyTestSeed;
 
     public function bootstrap(
         Configuration $configuration,
         Facade $facade,
         ParameterCollection $parameters
     ): void {
-        $this->initializeGlobalSeed();
+        $this->initializeFlakySeed();
 
         $facade->registerSubscriber(new PreparationStartedSubscriber());
 
@@ -29,7 +29,7 @@ final class FlakyFixExtension implements Extension
          */
 
         echo PHP_EOL
-            . sprintf('Global Seed: %s. To reproduce, run `FLAKY_SEED=%s php artisan test --filter ...`', self::$globalSeed, self::$globalSeed)
+            . sprintf('Flaky Test Seed: %s. To reproduce, run `FLAKY_SEED=%s php artisan test --filter ...`', self::$flakySeed, self::$flakySeed)
             . PHP_EOL . PHP_EOL;
     }
 }
