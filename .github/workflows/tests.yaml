@@ -170,7 +170,7 @@ jobs:
 
       - name: "Require pestphp/pest"
         if: "matrix.runner == 'pest'"
-        run: "composer require pestphp/pest:${{ matrix.pest-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
+        run: "composer require pestphp/pest:^${{ matrix.pest-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
 
       - name: "Install ${{ matrix.dependencies }} dependencies with ramsey/composer-install"
         uses: ramsey/composer-install@v3
