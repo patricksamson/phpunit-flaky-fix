@@ -99,4 +99,4 @@ This project uses the [MIT license](LICENSE.md).
 
 ## Credits
 
-The testing structure of this package is heavily inspired from  [`ergebnis/phpunit-slow-test-detector`](https://github.com/ergebnis/phpunit-slow-test-detector), originally licensed under MIT by [John Kary](https://github.com/ergebnis).
+The testing structure of this package is heavily inspired from  [`ergebnis/phpunit-slow-test-detector`](https://github.com/ergebnis/phpunit-slow-test-detector), originally licensed under MIT by [Andreas Möller](https://github.com/ergebnis).
