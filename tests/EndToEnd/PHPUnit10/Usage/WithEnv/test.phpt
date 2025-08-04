@@ -17,6 +17,6 @@ $application = new TextUI\Application();
 $application->run($_SERVER['argv']);
 putenv('FLAKY_SEED');
 --EXPECTF--
-Global Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
+Flaky Test Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
 
 %a

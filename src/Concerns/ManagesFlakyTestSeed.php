@@ -2,14 +2,14 @@
 
 namespace PatrickSamson\PHPUnitFlakyFix\Concerns;
 
-trait ManagesGlobalSeed
+trait ManagesFlakyTestSeed
 {
-    protected static $globalSeed;
+    protected static $flakySeed;
 
-    public function initializeGlobalSeed(): void
+    public function initializeFlakySeed(): void
     {
         // If the global seed is already initialized, re-seed the random number generator.
-        if ($this->isGlobalSeedInitialized()) {
+        if ($this->isFlakySeedInitialized()) {
             $this->seedRandomnessSources();
 
             return;
@@ -17,20 +17,20 @@ trait ManagesGlobalSeed
 
         // Check if a specific seed is provided via environment variable.
         if ($this->isSeedProvidedFromEnv()) {
-            $this->setGlobalSeed($this->getSeedFromEnv());
+            $this->setFlakyTestSeed($this->getFlakySeedFromEnv());
             //ray(static::$globalSeed)->label('Using Seed from Environment')->blue();
 
             return;
         }
 
         // Use a more robust locking mechanism
-        $lockFilePath = sys_get_temp_dir() . '/phpunit-global-seed.lock';
-        $seedFilePath = sys_get_temp_dir() . '/phpunit-global-seed.txt';
+        $lockFilePath = static::getLockFilePath();
+        $seedFilePath = static::getSeedFilePath();
         $lockHandle = fopen($lockFilePath, 'c+');
 
         if ($lockHandle === false) {
             // Fallback if can't create lock file.
-            $this->setGlobalSeed($this->generateRandomSeed());
+            $this->setFlakyTestSeed($this->generateRandomSeed());
             //ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
 
             return;
@@ -41,12 +41,12 @@ trait ManagesGlobalSeed
             // Check if seed file already exists (another process might have created it)
             if (file_exists($seedFilePath)) {
                 // Read existing seed
-                $this->setGlobalSeed((int) file_get_contents($seedFilePath));
+                $this->setFlakyTestSeed((int) file_get_contents($seedFilePath));
                 //ray(static::$globalSeed)->label('Read Global Seed from lock file')->green();
             } else {
                 // This is the first process, generate and write the seed
-                $this->setGlobalSeed($this->generateRandomSeed());
-                file_put_contents($seedFilePath, static::$globalSeed);
+                $this->setFlakyTestSeed($this->generateRandomSeed());
+                file_put_contents($seedFilePath, static::$flakySeed);
                 //ray(static::$globalSeed)->label('Generated Global Seed')->purple();
 
                 // Register cleanup for the first process
@@ -56,32 +56,32 @@ trait ManagesGlobalSeed
             flock($lockHandle, LOCK_UN);
         } else {
             // Fallback if locking fails
-            static::$globalSeed = mt_rand(0, mt_getrandmax());
+            static::$flakySeed = mt_rand(0, mt_getrandmax());
             //ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
         }
 
         fclose($lockHandle);
     }
 
-    public function isGlobalSeedInitialized(): bool
+    public function isFlakySeedInitialized(): bool
     {
-        return static::$globalSeed !== null;
+        return static::$flakySeed !== null;
     }
 
-    public function setGlobalSeed(int $seed): void
+    public function setFlakyTestSeed(int $seed): void
     {
-        static::$globalSeed = $seed;
+        static::$flakySeed = $seed;
         $this->seedRandomnessSources();
     }
 
     public function seedRandomnessSources(): void
     {
-        if (static::$globalSeed === null) {
+        if (static::$flakySeed === null) {
             throw new \RuntimeException('Global seed is not initialized.');
         }
 
         // Seed the random number generator with the global seed
-        mt_srand(static::$globalSeed);
+        mt_srand(static::$flakySeed);
     }
 
     /**
@@ -89,13 +89,13 @@ trait ManagesGlobalSeed
      */
     public function isSeedProvidedFromEnv(): bool
     {
-        return $this->getSeedFromEnv() !== null;
+        return $this->getFlakySeedFromEnv() !== null;
     }
 
     /**
      * Retrieves the seed from the environment variable
      */
-    public function getSeedFromEnv(): ?int
+    public function getFlakySeedFromEnv(): ?int
     {
         $envSeed = getenv('FLAKY_SEED');
 
@@ -112,8 +112,8 @@ trait ManagesGlobalSeed
 
     public function cleanupLockFiles(): void
     {
-        $lockFilePath = sys_get_temp_dir() . '/phpunit-global-seed.lock';
-        $seedFilePath = sys_get_temp_dir() . '/phpunit-global-seed.txt';
+        $lockFilePath = static::getLockFilePath();
+        $seedFilePath = static::getSeedFilePath();
 
         if (file_exists($lockFilePath)) {
             @unlink($lockFilePath);
@@ -122,5 +122,21 @@ trait ManagesGlobalSeed
         if (file_exists($seedFilePath)) {
             @unlink($seedFilePath);
         }
+    }
+
+    /**
+     * Get the full lock file path
+     */
+    public static function getLockFilePath(): string
+    {
+        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.lock';
+    }
+
+    /**
+     * Get the full seed file path
+     */
+    public static function getSeedFilePath(): string
+    {
+        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.txt';
     }
 }

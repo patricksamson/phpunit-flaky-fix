@@ -9,6 +9,6 @@ passthru('FLAKY_SEED=1234567890 vendor/bin/paratest --configuration=tests/EndToE
 --EXPECTF--
 ParaTest %a
 
-Global Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
+Flaky Test Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
 
 %a
