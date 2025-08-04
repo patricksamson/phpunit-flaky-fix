@@ -7,11 +7,45 @@ on:
     branches: [master]
 
 jobs:
-  tests:
-    name: "Tests"
-
+  Unit-tests:
+    name: "Unit Tests"
     runs-on: "ubuntu-latest"
+    timeout-minutes: 5
 
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Set up PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "none"
+          php-version: "8.4"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --ansi --strict"
+
+      - name: "Get Composer Cache Directory"
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: "Composer Cache"
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: "php-unit-tests-composer-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-unit-tests-composer-"
+
+      - name: "Install dependencies with composer"
+        run: "composer install --ansi --no-interaction --no-progress"
+
+      - name: "Run unit tests"
+        run: "vendor/bin/phpunit --colors=always"
+
+  E2E-tests:
+    name: "E2E Tests"
+    runs-on: "ubuntu-latest"
     timeout-minutes: 5
 
     strategy:
@@ -98,7 +132,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: "none"
-          # extensions: "none, ctype, curl, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter"
           php-version: "${{ matrix.php-version }}"
 
       - name: "Validate composer.json and composer.lock"
