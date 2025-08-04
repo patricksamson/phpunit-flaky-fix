@@ -16,11 +16,9 @@ final class ManagesGlobalSeedTest extends TestCase
     protected function setUp(): void
     {
         $this->testInstance = new TestClassUsingManagesGlobalSeed();
-        $this->lockFilePath = sys_get_temp_dir() . '/phpunit-flaky-seed.lock';
-        $this->seedFilePath = sys_get_temp_dir() . '/phpunit-flaky-seed.txt';
 
         // Clean up any existing files
-        $this->cleanupFiles();
+        $this->testInstance->cleanupLockFiles();
 
         // Reset the static seed property
         $this->testInstance->resetGlobalSeed();
@@ -28,21 +26,11 @@ final class ManagesGlobalSeedTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->cleanupFiles();
+        $this->testInstance->cleanupLockFiles();
         $this->testInstance->resetGlobalSeed();
 
         // Clear environment variable
         putenv('FLAKY_SEED');
-    }
-
-    private function cleanupFiles(): void
-    {
-        if (file_exists($this->lockFilePath)) {
-            @unlink($this->lockFilePath);
-        }
-        if (file_exists($this->seedFilePath)) {
-            @unlink($this->seedFilePath);
-        }
     }
 
     public function test_generates_random_seed(): void
@@ -139,16 +127,16 @@ final class ManagesGlobalSeedTest extends TestCase
     public function test_cleanup_lock_files(): void
     {
         // Create some test files
-        file_put_contents($this->lockFilePath, 'test');
-        file_put_contents($this->seedFilePath, '12345');
+        file_put_contents($this->testInstance->getLockFilePath(), 'test');
+        file_put_contents($this->testInstance->getSeedFilePath(), '12345');
 
-        $this->assertFileExists($this->lockFilePath);
-        $this->assertFileExists($this->seedFilePath);
+        $this->assertFileExists($this->testInstance->getLockFilePath());
+        $this->assertFileExists($this->testInstance->getSeedFilePath());
 
         $this->testInstance->cleanupLockFiles();
 
-        $this->assertFileDoesNotExist($this->lockFilePath);
-        $this->assertFileDoesNotExist($this->seedFilePath);
+        $this->assertFileDoesNotExist($this->testInstance->getLockFilePath());
+        $this->assertFileDoesNotExist($this->testInstance->getSeedFilePath());
     }
 
     public function FLAKY_SEED_randomness_sources_throws_exception_when_seed_not_initialized(): void

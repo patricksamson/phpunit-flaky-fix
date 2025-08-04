@@ -6,9 +6,6 @@ trait ManagesFlakyTestSeed
 {
     protected static $flakySeed;
 
-    protected const LOCK_FILE_NAME = 'phpunit-flaky-seed.lock';
-    protected const SEED_FILE_NAME = 'phpunit-flaky-seed.txt';
-
     public function initializeFlakySeed(): void
     {
         // If the global seed is already initialized, re-seed the random number generator.
@@ -27,8 +24,8 @@ trait ManagesFlakyTestSeed
         }
 
         // Use a more robust locking mechanism
-        $lockFilePath = sys_get_temp_dir() . '/'.self::LOCK_FILE_NAME;
-        $seedFilePath = sys_get_temp_dir() . '/'.self::SEED_FILE_NAME;
+        $lockFilePath = static::getLockFilePath();
+        $seedFilePath = static::getSeedFilePath();
         $lockHandle = fopen($lockFilePath, 'c+');
 
         if ($lockHandle === false) {
@@ -115,8 +112,8 @@ trait ManagesFlakyTestSeed
 
     public function cleanupLockFiles(): void
     {
-        $lockFilePath = sys_get_temp_dir() . '/' . self::LOCK_FILE_NAME;
-        $seedFilePath = sys_get_temp_dir() . '/' . self::SEED_FILE_NAME;
+        $lockFilePath = static::getLockFilePath();
+        $seedFilePath = static::getSeedFilePath();
 
         if (file_exists($lockFilePath)) {
             @unlink($lockFilePath);
@@ -125,5 +122,21 @@ trait ManagesFlakyTestSeed
         if (file_exists($seedFilePath)) {
             @unlink($seedFilePath);
         }
+    }
+
+    /**
+     * Get the full lock file path
+     */
+    public static function getLockFilePath(): string
+    {
+        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.lock';
+    }
+
+    /**
+     * Get the full seed file path
+     */
+    public static function getSeedFilePath(): string
+    {
+        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.txt';
     }
 }
