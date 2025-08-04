@@ -1,6 +1,7 @@
 {
     "name": "patricksamson/phpunit-flaky-fix",
     "description": "A PHPUnit extension to help reproduce flaky tests.",
+    "license": "MIT",
     "type": "library",
     "keywords": [
         "phpunit"
