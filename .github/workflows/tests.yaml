@@ -163,15 +163,15 @@ jobs:
           custom-cache-suffix: "phpunit-${{ matrix.phpunit-version }}-${{ matrix.runner || 'phpunit' }}"
 
       - name: "Run end-to-end tests with phpunit/phpunit:10.0.0"
-        if: "matrix.phpunit-version == '10.0.0'"
+        if: "startsWith(matrix.phpunit-version, '10.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit10/phpunit.xml"
 
       - name: "Run end-to-end tests with phpunit/phpunit:11.0.0"
-        if: "matrix.phpunit-version == '11.0.0'"
+        if: "startsWith(matrix.phpunit-version, '11.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit11/phpunit.xml"
 
       - name: "Run end-to-end tests with phpunit/phpunit:12.0.0"
-        if: "matrix.phpunit-version == '12.0.0'"
+        if: "startsWith(matrix.phpunit-version, '12.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml"
 
       - name: "Run end-to-end tests with Paratest"
