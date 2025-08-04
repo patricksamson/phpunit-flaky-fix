@@ -1,0 +1,146 @@
+name: "Tests"
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  tests:
+    name: "Tests"
+
+    runs-on: "ubuntu-latest"
+
+    timeout-minutes: 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - phpunit-version: "10.0.0"
+            php-version: "8.1"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.1"
+            dependencies: "highest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.2"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.2"
+            dependencies: "highest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          - phpunit-version: "10.5.35"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.5.35"
+            php-version: "8.4"
+            dependencies: "highest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.2"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.2"
+            dependencies: "highest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          - phpunit-version: "11.3.6"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.3.6"
+            php-version: "8.4"
+            dependencies: "highest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "highest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@2"
+        with:
+          coverage: "none"
+          # extensions: "none, ctype, curl, dom, json, mbstring, phar, simplexml, tokenizer, xml, xmlwriter"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --ansi --strict"
+
+      # https://github.com/actions/cache/blob/main/examples.md#php---composer
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-phpunit-${{ matrix.phpunit-version }}-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-phpunit-${{ matrix.phpunit-version }}-"
+
+      - name: "Remove incompatible dependencies with composer"
+        if: "matrix.dependencies != 'locked'"
+        run: "composer remove spatie/ray brianium/paratest --ansi --dev --no-interaction --no-progress"
+
+      - name: "Remove platform configuration with composer"
+        if: "matrix.dependencies != 'locked'"
+        run: "composer config platform.php --ansi --unset"
+
+      - name: "Require phpunit/phpunit:^${{ matrix.phpunit-version }}"
+        if: "matrix.dependencies != 'locked'"
+        run: "composer require phpunit/phpunit:^${{ matrix.phpunit-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
+        uses: "ergebnis/.github/actions/composer/install@1.9.3"
+        with:
+          dependencies: "${{ matrix.dependencies }}"
+
+      - name: "Run end-to-end tests with phpunit/phpunit:10.0.0"
+        if: "matrix.phpunit-version == '10.0.0'"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit10/phpunit.xml"
+
+      - name: "Run end-to-end tests with phpunit/phpunit:11.0.0"
+        if: "matrix.phpunit-version == '11.0.0'"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit11/phpunit.xml"
+
+      - name: "Run end-to-end tests with phpunit/phpunit:12.0.0"
+        if: "matrix.phpunit-version == '12.0.0'"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml"
