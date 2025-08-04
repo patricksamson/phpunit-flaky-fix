@@ -120,6 +120,7 @@ jobs:
             dependencies: "highest"
 
           # Paratest tests (only for latest PHP and PHPUnit versions)
+          # https://github.com/paratestphp/paratest?tab=readme-ov-file#versions
           - phpunit-version: "12.0.0"
             php-version: "8.4"
             dependencies: "lowest"
@@ -131,7 +132,7 @@ jobs:
             runner: "paratest"
 
           # Pest tests : https://pestphp.com/docs/support-policy
-          # Pest 2
+          # Pest 2 tests
           - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
@@ -142,7 +143,7 @@ jobs:
             runner: "pest"
             pest-version: "2.0.0"
 
-          # Pest 3
+          # Pest 3 tests
           - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
