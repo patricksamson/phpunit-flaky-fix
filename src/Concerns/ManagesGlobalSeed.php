@@ -18,7 +18,7 @@ trait ManagesGlobalSeed
         // Check if a specific seed is provided via environment variable.
         if ($this->isSeedProvidedFromEnv()) {
             $this->setGlobalSeed($this->getSeedFromEnv());
-            ray(static::$globalSeed)->label('Using Seed from Environment')->blue();
+            //ray(static::$globalSeed)->label('Using Seed from Environment')->blue();
 
             return;
         }
@@ -31,7 +31,7 @@ trait ManagesGlobalSeed
         if ($lockHandle === false) {
             // Fallback if can't create lock file.
             $this->setGlobalSeed($this->generateRandomSeed());
-            ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
+            //ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
 
             return;
         }
@@ -42,12 +42,12 @@ trait ManagesGlobalSeed
             if (file_exists($seedFilePath)) {
                 // Read existing seed
                 $this->setGlobalSeed((int) file_get_contents($seedFilePath));
-                ray(static::$globalSeed)->label('Read Global Seed from lock file')->green();
+                //ray(static::$globalSeed)->label('Read Global Seed from lock file')->green();
             } else {
                 // This is the first process, generate and write the seed
                 $this->setGlobalSeed($this->generateRandomSeed());
                 file_put_contents($seedFilePath, static::$globalSeed);
-                ray(static::$globalSeed)->label('Generated Global Seed')->purple();
+                //ray(static::$globalSeed)->label('Generated Global Seed')->purple();
 
                 // Register cleanup for the first process
                 register_shutdown_function([$this, 'cleanupLockFiles']);
@@ -57,7 +57,7 @@ trait ManagesGlobalSeed
         } else {
             // Fallback if locking fails
             static::$globalSeed = mt_rand(0, mt_getrandmax());
-            ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
+            //ray(static::$globalSeed)->label('Fallback Seed Generation')->red();
         }
 
         fclose($lockHandle);

@@ -19,6 +19,6 @@ final class PreparationStartedSubscriber implements TestPreparationStartedSubscr
     public function notify(PreparationStarted $event): void
     {
         $this->initializeGlobalSeed();
-        ray(self::$globalSeed)->blue();
+        //ray(self::$globalSeed)->blue();
     }
 }
