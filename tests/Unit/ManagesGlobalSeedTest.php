@@ -139,7 +139,7 @@ final class ManagesGlobalSeedTest extends TestCase
         $this->assertFileDoesNotExist($this->testInstance->getSeedFilePath());
     }
 
-    public function FLAKY_SEED_randomness_sources_throws_exception_when_seed_not_initialized(): void
+    public function test_seed_randomness_sources_throws_exception_when_seed_not_initialized(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Global seed is not initialized.');
