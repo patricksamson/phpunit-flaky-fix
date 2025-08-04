@@ -26,7 +26,9 @@ jobs:
         run: "composer validate --ansi --strict"
 
       - name: "Install dependencies with ramsey/composer-install"
-        uses: ramsey/composer-install@v3
+        uses: "ramsey/composer-install@v3"
+        with:
+          custom-cache-suffix: "unit-tests"
 
       - name: "Run unit tests"
         run: "vendor/bin/phpunit --colors=always"
@@ -158,6 +160,7 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
           dependency-versions: "${{ matrix.dependencies }}"
+          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version }}-${{ matrix.runner || 'phpunit' }}"
 
       - name: "Run end-to-end tests with phpunit/phpunit:10.0.0"
         if: "matrix.phpunit-version == '10.0.0'"
