@@ -129,7 +129,7 @@ trait ManagesFlakyTestSeed
      */
     public static function getLockFilePath(): string
     {
-        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.lock';
+        return sys_get_temp_dir() . '/phpunit-flaky-seed.lock';
     }
 
     /**
@@ -137,6 +137,6 @@ trait ManagesFlakyTestSeed
      */
     public static function getSeedFilePath(): string
     {
-        return sys_get_temp_dir() . '/' . 'phpunit-flaky-seed.txt';
+        return sys_get_temp_dir() . '/phpunit-flaky-seed.txt';
     }
 }

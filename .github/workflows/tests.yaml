@@ -42,6 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # PHPUnit : https://phpunit.de/supported-versions.html
           # PHPUnit 10.0.0 tests
           - phpunit-version: "10.0.0"
             php-version: "8.1"
