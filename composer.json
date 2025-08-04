@@ -1,6 +1,7 @@
 {
     "name": "patricksamson/phpunit-flaky-fix",
     "description": "A PHPUnit extension to help reproduce flaky tests.",
+    "license": "MIT",
     "type": "library",
     "keywords": [
         "phpunit"
@@ -12,8 +13,8 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "phpunit/phpunit": "^12.0"
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+        "phpunit/phpunit": "^10.0.0 || ^11.0.0 || ^12.0.0"
     },
     "require-dev": {
         "spatie/ray": "^1.42",
@@ -22,6 +23,11 @@
     "autoload": {
         "psr-4": {
             "PatrickSamson\\PHPUnitFlakyFix\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }

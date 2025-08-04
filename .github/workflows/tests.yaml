@@ -1,0 +1,216 @@
+name: "Tests"
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  Unit-tests:
+    name: "Unit Tests"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Set up PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "none"
+          php-version: "8.4"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --ansi --strict"
+
+      - name: "Install dependencies with ramsey/composer-install"
+        uses: "ramsey/composer-install@v3"
+        with:
+          custom-cache-suffix: "unit-tests"
+
+      - name: "Run unit tests"
+        run: "vendor/bin/phpunit --colors=always"
+
+  E2E-tests:
+    name: "E2E Tests"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # PHPUnit 10.0.0 tests
+          - phpunit-version: "10.0.0"
+            php-version: "8.1"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.1"
+            dependencies: "highest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.2"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.2"
+            dependencies: "highest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          # PHPUnit 10.5.35 tests
+          - phpunit-version: "10.5.35"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "10.5.35"
+            php-version: "8.4"
+            dependencies: "highest"
+
+          # PHPUnit 11.0.0 tests
+          - phpunit-version: "11.0.0"
+            php-version: "8.2"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.2"
+            dependencies: "highest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          # PHPUnit 11.3.6 tests
+          - phpunit-version: "11.3.6"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "11.3.6"
+            php-version: "8.4"
+            dependencies: "highest"
+
+          # PHPUnit 12.0.0 tests
+          - phpunit-version: "12.0.0"
+            php-version: "8.3"
+            dependencies: "lowest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.3"
+            dependencies: "highest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "lowest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "highest"
+
+          # Paratest tests (only for latest PHP and PHPUnit versions)
+          # https://github.com/paratestphp/paratest?tab=readme-ov-file#versions
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "lowest"
+            runner: "paratest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.4"
+            dependencies: "highest"
+            runner: "paratest"
+
+          # Pest tests : https://pestphp.com/docs/support-policy
+          # Pest 2 tests
+          - php-version: "8.4"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.4"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          # Pest 3 tests
+          - php-version: "8.4"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+          - php-version: "8.4"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Set up PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --ansi --strict"
+
+      - name: "Remove incompatible dependencies with composer"
+        run: "composer remove spatie/ray brianium/paratest --ansi --dev --no-interaction --no-progress"
+
+      - name: "Remove platform configuration with composer"
+        run: "composer config platform.php --ansi --unset"
+
+      - name: "Require phpunit/phpunit:^${{ matrix.phpunit-version }}"
+        if: "matrix.phpunit-version != ''"
+        run: "composer require phpunit/phpunit:^${{ matrix.phpunit-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
+
+      - name: "Require brianium/paratest"
+        if: "matrix.runner == 'paratest'"
+        run: "composer require brianium/paratest --ansi --no-interaction --no-progress --update-with-all-dependencies"
+
+      - name: "Require pestphp/pest"
+        if: "matrix.runner == 'pest'"
+        run: "composer require pestphp/pest:^${{ matrix.pest-version }} --ansi --no-interaction --no-progress --update-with-all-dependencies"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with ramsey/composer-install"
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          custom-cache-suffix: "phpunit-${{ matrix.phpunit-version || 'NA' }}--runner-${{ matrix.runner || 'phpunit' }}-pest-${{ matrix.pest-version || 'NA' }}"
+
+      - name: "Run end-to-end tests with PHPUnit 10"
+        if: "startsWith(matrix.phpunit-version, '10.')"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit10/phpunit.xml"
+
+      - name: "Run end-to-end tests with PHPUnit 11"
+        if: "startsWith(matrix.phpunit-version, '11.')"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit11/phpunit.xml"
+
+      - name: "Run end-to-end tests with with PHPUnit 12"
+        if: "startsWith(matrix.phpunit-version, '12.')"
+        run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml"
+
+      - name: "Run end-to-end tests with Paratest"
+        if: "matrix.runner == 'paratest'"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/ParaTest/phpunit.xml"
+
+      - name: "Run end-to-end tests with Pest 2"
+        if: "matrix.runner == 'pest'"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest2/phpunit.xml"
+
+      - name: "Run end-to-end tests with Pest 3"
+        if: "matrix.runner == 'pest'"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
