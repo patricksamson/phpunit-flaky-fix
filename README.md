@@ -28,14 +28,51 @@ composer require --dev patricksamson/phpunit-flaky-fix
 
 You'll then need to register the extension in your `phpunit.xml` file:
 
-```xml
-<phpunit>
-    <extensions>
-        <bootstrap class="PatrickSamson\PHPUnitFlakyFix\FlakyFixExtension" />
-    </extensions>
-</phpunit>
+```diff
+ <phpunit
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+     bootstrap="vendor/autoload.php"
+ >
++    <extensions>
++        <bootstrap class="PatrickSamson\PHPUnitFlakyFix\FlakyFixExtension" />
++    </extensions>
+     <testsuites>
+         <testsuite name="unit">
+             <directory>tests/Unit/</directory>
+         </testsuite>
+     </testsuites>
+ </phpunit>
 ```
 
+## Usage
+
+When you have bootstrapped the extension, you can run your tests as usual:
+
+```sh
+vendor/bin/phpunit
+php artisan test
+php artisan test --parallel
+```
+
+The generated `Flaky Test Seed` will be one of the first lines in the output, and you can use it to reproduce flaky test failures.
+
+```console
+vendor/bin/phpunit --colors=always
+
+Flaky Test Seed: 2031556362. To reproduce, run `FLAKY_SEED=2031556362 php artisan test --filter ...`
+
+PHPUnit 12.3.0 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.4.10
+Configuration: /home/runner/work/phpunit-flaky-fix/phpunit-flaky-fix/phpunit.xml
+
+...........                                                       11 / 11 (100%)
+
+Time: 00:00.003, Memory: 14.00 MB
+
+OK (11 tests, 35 assertions)
+```
 ## How It Works
 
 The extension works by:
@@ -55,3 +92,11 @@ In practice, there is some additional complexity to ensure compatibility with pa
 3. It does not control randomness from other sources (e.g., database auto-increment values, UUID generation, external API calls, ...)
 4. The seed is generated per test suite run, not per individual test
 5. Some PHPUnit features or third-party tools might interfere with the seed generation process or the output display
+
+## License
+
+This project uses the [MIT license](LICENSE.md).
+
+## Credits
+
+The testing structure of this package is heavily inspired from  [`ergebnis/phpunit-slow-test-detector`](https://github.com/ergebnis/phpunit-slow-test-detector), originally licensed under MIT by [John Kary](https://github.com/ergebnis).
