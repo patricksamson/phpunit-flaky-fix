@@ -130,7 +130,19 @@ jobs:
             dependencies: "highest"
             runner: "paratest"
 
-          # Pest tests
+          # Pest tests : https://pestphp.com/docs/support-policy
+          # Pest 2
+          - php-version: "8.4"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.4"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          # Pest 3
           - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
@@ -178,15 +190,15 @@ jobs:
           dependency-versions: "${{ matrix.dependencies }}"
           custom-cache-suffix: "phpunit-${{ matrix.phpunit-version || 'NA' }}-${{ matrix.runner || 'phpunit' }}"
 
-      - name: "Run end-to-end tests with phpunit/phpunit:10.0.0"
+      - name: "Run end-to-end tests with PHPUnit 10"
         if: "startsWith(matrix.phpunit-version, '10.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit10/phpunit.xml"
 
-      - name: "Run end-to-end tests with phpunit/phpunit:11.0.0"
+      - name: "Run end-to-end tests with PHPUnit 11"
         if: "startsWith(matrix.phpunit-version, '11.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit11/phpunit.xml"
 
-      - name: "Run end-to-end tests with phpunit/phpunit:12.0.0"
+      - name: "Run end-to-end tests with with PHPUnit 12"
         if: "startsWith(matrix.phpunit-version, '12.')"
         run: "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml"
 
@@ -194,6 +206,10 @@ jobs:
         if: "matrix.runner == 'paratest'"
         run: "vendor/bin/phpunit --configuration=tests/EndToEnd/ParaTest/phpunit.xml"
 
-      - name: "Run end-to-end tests with Pest"
+      - name: "Run end-to-end tests with Pest 2"
         if: "matrix.runner == 'pest'"
-        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest/phpunit.xml"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
+
+      - name: "Run end-to-end tests with Pest 3"
+        if: "matrix.runner == 'pest'"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
