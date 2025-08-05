@@ -133,6 +133,7 @@ jobs:
             runner: "paratest"
 
           # Pest tests : https://pestphp.com/docs/support-policy
+          # Pest manages its own PHPUnit and ParaTest version requirements
           # Pest 2 tests
           - php-version: "8.4"
             dependencies: "lowest"
@@ -209,9 +210,9 @@ jobs:
         run: "vendor/bin/phpunit --configuration=tests/EndToEnd/ParaTest/phpunit.xml"
 
       - name: "Run end-to-end tests with Pest 2"
-        if: "matrix.runner == 'pest'"
+        if: "matrix.runner == 'pest' && startsWith(matrix.pest-version, '2.')"
         run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest2/phpunit.xml"
 
       - name: "Run end-to-end tests with Pest 3"
-        if: "matrix.runner == 'pest'"
+        if: "matrix.runner == 'pest' && startsWith(matrix.pest-version, '3.')"
         run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
