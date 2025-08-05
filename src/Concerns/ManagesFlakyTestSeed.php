@@ -4,7 +4,7 @@ namespace PatrickSamson\PHPUnitFlakyFix\Concerns;
 
 trait ManagesFlakyTestSeed
 {
-    protected static $flakySeed;
+    protected static ?int $flakySeed = null;
 
     public function initializeFlakySeed(): void
     {
@@ -16,9 +16,9 @@ trait ManagesFlakyTestSeed
         }
 
         // Check if a specific seed is provided via environment variable.
-        if ($this->isSeedProvidedFromEnv()) {
+        if ($this->getFlakySeedFromEnv() !== null) {
             $this->setFlakyTestSeed($this->getFlakySeedFromEnv());
-            //ray(static::$flakySeed)->label('Using Seed from Environment')->blue();
+            // ray(static::$flakySeed)->label('Using Seed from Environment')->blue();
 
             return;
         }
@@ -31,7 +31,7 @@ trait ManagesFlakyTestSeed
         if ($lockHandle === false) {
             // Fallback if can't create lock file.
             $this->setFlakyTestSeed($this->generateRandomSeed());
-            //ray(static::$flakySeed)->label('Fallback Seed Generation')->red();
+            // ray(static::$flakySeed)->label('Fallback Seed Generation')->red();
 
             return;
         }
@@ -42,12 +42,12 @@ trait ManagesFlakyTestSeed
             if (file_exists($seedFilePath)) {
                 // Read existing seed
                 $this->setFlakyTestSeed((int) file_get_contents($seedFilePath));
-                //ray(static::$flakySeed)->label('Read Global Seed from lock file')->green();
+                // ray(static::$flakySeed)->label('Read Global Seed from lock file')->green();
             } else {
                 // This is the first process, generate and write the seed
                 $this->setFlakyTestSeed($this->generateRandomSeed());
                 file_put_contents($seedFilePath, static::$flakySeed);
-                //ray(static::$flakySeed)->label('Generated Global Seed')->purple();
+                // ray(static::$flakySeed)->label('Generated Global Seed')->purple();
 
                 // Register cleanup for the first process
                 register_shutdown_function([$this, 'cleanupLockFiles']);
@@ -57,7 +57,7 @@ trait ManagesFlakyTestSeed
         } else {
             // Fallback if locking fails
             static::$flakySeed = mt_rand(0, mt_getrandmax());
-            //ray(static::$flakySeed)->label('Fallback Seed Generation')->red();
+            // ray(static::$flakySeed)->label('Fallback Seed Generation')->red();
         }
 
         fclose($lockHandle);

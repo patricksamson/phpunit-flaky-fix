@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class RandomTest extends TestCase
 {
-    public function test_mt_rand(): void
+    public function testMtRand(): void
     {
         self::assertGreaterThanOrEqual(0, mt_rand());
     }

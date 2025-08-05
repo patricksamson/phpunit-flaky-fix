@@ -18,8 +18,11 @@
     },
     "require-dev": {
         "brianium/paratest": "^7.0",
+        "laravel/pint": "^1.24",
         "pestphp/pest": "^2.0.0 || ^3.0.0",
-        "spatie/ray": "^1.42"
+        "phpstan/phpstan": "^2.1",
+        "spatie/ray": "^1.42",
+        "rector/rector": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -37,5 +40,19 @@
                 "PatrickSamson\\PHPUnitFlakyFix\\Pest\\Plugin"
             ]
         }
+    },
+    "scripts": {
+        "refacto": "rector",
+        "lint": "pint",
+        "test:refacto": "rector --dry-run",
+        "test:lint": "pint --test",
+        "test:types": "phpstan analyse --ansi",
+        "test:unit": "phpunit",
+        "test": [
+            "@test:refacto",
+            "@test:lint",
+            "@test:types",
+            "@test:unit"
+        ]
     }
 }

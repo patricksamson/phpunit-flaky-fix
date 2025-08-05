@@ -30,12 +30,13 @@ final class RandomSeedingIntegrationTest extends TestCase
         if (file_exists($lockFilePath)) {
             @unlink($lockFilePath);
         }
+
         if (file_exists($seedFilePath)) {
             @unlink($seedFilePath);
         }
     }
 
-    public function test_same_seed_produces_same_random_sequence(): void
+    public function testSameSeedProducesSameRandomSequence(): void
     {
         $seed = 42;
 
@@ -63,7 +64,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         $this->assertSame($sequence1, $sequence2);
     }
 
-    public function test_different_seeds_produce_different_sequences(): void
+    public function testDifferentSeedsProduceDifferentSequences(): void
     {
         // First sequence with seed 100
         $this->setFlakyTestSeed(100);
@@ -85,7 +86,7 @@ final class RandomSeedingIntegrationTest extends TestCase
         $this->assertNotSame($sequence1, $sequence2);
     }
 
-    public function test_environment_seed_produces_consistent_results(): void
+    public function testEnvironmentSeedProducesConsistentResults(): void
     {
         putenv('FLAKY_SEED=999');
 
