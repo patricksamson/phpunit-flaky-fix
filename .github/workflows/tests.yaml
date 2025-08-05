@@ -169,7 +169,7 @@ jobs:
         run: "composer validate --ansi --strict"
 
       - name: "Remove incompatible dependencies with composer"
-        run: "composer remove spatie/ray brianium/paratest --ansi --dev --no-interaction --no-progress"
+        run: "composer remove spatie/ray brianium/paratest laravel/pint phpstan/phpstan rector/rector --ansi --dev --no-interaction --no-progress"
 
       - name: "Remove platform configuration with composer"
         run: "composer config platform.php --ansi --unset"
