@@ -16,7 +16,7 @@ This package is compatible with the following versions of PHP and PHPUnit:
 
 It has been tested with the following versions of popular tools that wrap PHPUnit:
 - **Paratest :** `^7.0`
-- **Pest :** `^2.0 || ^3.0`
+- **Pest :** `^2.0 || ^3.0` (this package include a Pest Plugin for improve compatibility)
 
 It is compatible with any tool that uses `mt_rand()` for randomness in tests, such as [Faker](https://github.com/FakerPHP/Faker).
 
