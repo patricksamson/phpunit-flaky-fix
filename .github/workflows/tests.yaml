@@ -135,6 +135,36 @@ jobs:
           # Pest tests : https://pestphp.com/docs/support-policy
           # Pest manages its own PHPUnit and ParaTest version requirements
           # Pest 2 tests
+          - php-version: "8.1"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.1"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.2"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.2"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.3"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
+          - php-version: "8.3"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "2.0.0"
+
           - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
@@ -146,6 +176,26 @@ jobs:
             pest-version: "2.0.0"
 
           # Pest 3 tests
+          - php-version: "8.2"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+          - php-version: "8.2"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+          - php-version: "8.3"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+          - php-version: "8.3"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
           - php-version: "8.4"
             dependencies: "lowest"
             runner: "pest"
@@ -170,7 +220,7 @@ jobs:
         run: "composer validate --ansi --strict"
 
       - name: "Remove incompatible dependencies with composer"
-        run: "composer remove spatie/ray brianium/paratest --ansi --dev --no-interaction --no-progress"
+        run: "composer remove brianium/paratest spatie/ray pestphp/pest --ansi --dev --no-interaction --no-progress"
 
       - name: "Remove platform configuration with composer"
         run: "composer config platform.php --ansi --unset"
