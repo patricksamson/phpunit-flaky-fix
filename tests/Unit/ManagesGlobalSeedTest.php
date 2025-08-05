@@ -11,10 +11,6 @@ final class ManagesGlobalSeedTest extends TestCase
 {
     private TestClassUsingManagesGlobalSeed $testInstance;
 
-    private string $lockFilePath;
-
-    private string $seedFilePath;
-
     protected function setUp(): void
     {
         $this->testInstance = new TestClassUsingManagesGlobalSeed();

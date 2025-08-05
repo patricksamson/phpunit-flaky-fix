@@ -12,8 +12,6 @@ final class PreparationStartedSubscriber implements TestPreparationStartedSubscr
 {
     use ManagesFlakyTestSeed;
 
-    public function __construct() {}
-
     public function notify(PreparationStarted $event): void
     {
         $this->initializeFlakySeed();

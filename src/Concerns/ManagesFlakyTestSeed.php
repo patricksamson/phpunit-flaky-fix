@@ -4,7 +4,7 @@ namespace PatrickSamson\PHPUnitFlakyFix\Concerns;
 
 trait ManagesFlakyTestSeed
 {
-    protected static int $flakySeed;
+    protected static ?int $flakySeed = null;
 
     public function initializeFlakySeed(): void
     {
@@ -16,7 +16,7 @@ trait ManagesFlakyTestSeed
         }
 
         // Check if a specific seed is provided via environment variable.
-        if ($this->isSeedProvidedFromEnv()) {
+        if ($this->getFlakySeedFromEnv() !== null) {
             $this->setFlakyTestSeed($this->getFlakySeedFromEnv());
             // ray(static::$globalSeed)->label('Using Seed from Environment')->blue();
 
