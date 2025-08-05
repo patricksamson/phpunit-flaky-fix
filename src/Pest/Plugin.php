@@ -18,14 +18,13 @@ final class Plugin implements Bootable
     /**
      * Creates a new Plugin instance.
      */
-    public function __construct(private readonly OutputInterface $output)
-    {
-    }
+    public function __construct(private readonly OutputInterface $output) {}
 
     public function boot(): void
     {
         $this->initializeFlakySeed();
-        if (!$this->isSeedProvidedFromEnv()) {
+
+        if (! $this->isSeedProvidedFromEnv()) {
             putenv('FLAKY_SEED=' . self::$flakySeed);
         }
 
