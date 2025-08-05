@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PatrickSamson\PHPUnitFlakyFix\Tests\EndToEnd\Pest\Usage\Default;
+namespace PatrickSamson\PHPUnitFlakyFix\Tests\EndToEnd\Pest2\Usage\Default;
 
 use PHPUnit\Framework\TestCase;
 

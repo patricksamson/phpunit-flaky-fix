@@ -29,5 +29,12 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "extra": {
+        "pest": {
+            "plugins": [
+                "PatrickSamson\\PHPUnitFlakyFix\\Pest\\Plugin"
+            ]
+        }
     }
 }
