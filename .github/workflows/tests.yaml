@@ -206,6 +206,27 @@ jobs:
             runner: "pest"
             pest-version: "3.0.0"
 
+          # Pest 4 tests
+          - php-version: "8.3"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
+          - php-version: "8.3"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
+          - php-version: "8.4"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
+          - php-version: "8.4"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -266,3 +287,7 @@ jobs:
       - name: "Run end-to-end tests with Pest 3"
         if: "matrix.runner == 'pest' && startsWith(matrix.pest-version, '3.')"
         run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest3/phpunit.xml"
+
+      - name: "Run end-to-end tests with Pest 4"
+        if: "matrix.runner == 'pest' && startsWith(matrix.pest-version, '4.')"
+        run: "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest4/phpunit.xml"

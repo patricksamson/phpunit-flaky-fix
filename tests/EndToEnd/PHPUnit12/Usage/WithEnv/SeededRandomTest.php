@@ -17,6 +17,6 @@ final class SeededRandomTest extends TestCase
     public function testReseededBetweenTests(): void
     {
         // This test will run with the same seed as the previous one
-        $this->test_seeded_mt_rand();
+        $this->testSeededMtRand();
     }
 }
