@@ -5,6 +5,9 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  schedule:
+    # Run weekly on Mondays at 04:00 UTC
+    - cron: "0 4 * * 1"
 
 jobs:
   Unit-tests:
