@@ -88,10 +88,11 @@ In practice, there is some additional complexity to ensure compatibility with pa
 ## Limitations
 
 1. This extension only affects PHP's `mt_rand()` function and related randomness functions
-2. It has no effect on time-based functions (e.g., `time()`, `date()`, ...), but that can be remediated using something like `Carbon::setTestNow($knownDate)`
-3. It does not control randomness from other sources (e.g., database auto-increment values, UUID generation, external API calls, ...)
-4. The seed is generated per test suite run, not per individual test
-5. Some PHPUnit features or third-party tools might interfere with the seed generation process or the output display
+2. It is not compatible with [`random_int()`](https://www.php.net/manual/en/function.random-int.php) as it can't be seeded.
+3. It has no effect on time-based functions (e.g., `time()`, `date()`, ...), but that can be remediated using something like `Carbon::setTestNow($knownDate)`
+4. It does not control randomness from other sources (e.g., database auto-increment values, UUID generation, external API calls, ...)
+5. The seed is generated per test suite run, not per individual test
+6. Some PHPUnit features or third-party tools might interfere with the seed generation process or the output display
 
 ## License
 
