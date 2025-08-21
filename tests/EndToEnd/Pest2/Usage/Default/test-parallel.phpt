@@ -10,4 +10,4 @@ passthru('vendor/bin/pest --configuration=tests/EndToEnd/Pest2/Usage/Default/php
 %s Flaky Test Seed: %d. To reproduce, run `FLAKY_SEED=%d php artisan test --filter ...`.
 
 
-%s.%a
+%s PASS %a
