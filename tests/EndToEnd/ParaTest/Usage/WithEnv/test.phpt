@@ -11,4 +11,4 @@ ParaTest %a
 
 Flaky Test Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
 
-%a
+Processes: %a

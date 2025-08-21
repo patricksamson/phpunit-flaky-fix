@@ -17,4 +17,4 @@ $application->run($_SERVER['argv']);
 --EXPECTF--
 Flaky Test Seed: %d. To reproduce, run `FLAKY_SEED=%d php artisan test --filter ...`
 
-%a
+PHPUnit %a

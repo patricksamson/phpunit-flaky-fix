@@ -38,5 +38,11 @@ final class Plugin implements Bootable
             '  <fg=white;options=bold;bg=blue> INFO </> ' . $message,
             '',
         ]);
+
+        /**
+         * Set the environment variable to indicate that the Flaky Fix output should be disabled.
+         * This is used to prevent duplicate output when running tests with Pest.
+         */
+        $_SERVER['FLAKY_FIX_NO_OUTPUT'] = '1';
     }
 }
