@@ -26,9 +26,13 @@ final class FlakyFixExtension implements Extension
         /**
          * Do not respect the `no-output` configuration for this extension.
          * This is necessary to work with `php artisan test`, Pest, and Paratest.
+         * However, we have to respect the `FLAKY_FIX_NO_OUTPUT` environment variable
+         * to prevent duplicate output when running tests from those PHPUnit wrappers.
          */
-        echo PHP_EOL
-            . sprintf('Flaky Test Seed: %s. To reproduce, run `FLAKY_SEED=%s php artisan test --filter ...`', self::$flakySeed, self::$flakySeed)
-            . PHP_EOL . PHP_EOL;
+        if (! isset($_SERVER['FLAKY_FIX_NO_OUTPUT']) || $_SERVER['FLAKY_FIX_NO_OUTPUT'] !== '1') {
+            echo PHP_EOL
+                . sprintf('Flaky Test Seed: %s. To reproduce, run `FLAKY_SEED=%s php artisan test --filter ...`', self::$flakySeed, self::$flakySeed)
+                . PHP_EOL . PHP_EOL;
+        }
     }
 }

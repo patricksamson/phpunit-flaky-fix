@@ -54,11 +54,17 @@
         "test:lint": "pint --test",
         "test:types": "phpstan analyse --ansi",
         "test:unit": "phpunit",
+        "test:e2e": [
+            "vendor/bin/phpunit --colors=always --configuration=tests/EndToEnd/PHPUnit12/phpunit.xml",
+            "vendor/bin/phpunit --configuration=tests/EndToEnd/ParaTest/phpunit.xml",
+            "vendor/bin/phpunit --configuration=tests/EndToEnd/Pest4/phpunit.xml"
+        ],
         "test": [
             "@test:refacto",
             "@test:lint",
             "@test:types",
-            "@test:unit"
+            "@test:unit",
+            "@test:e2e"
         ]
     }
 }
