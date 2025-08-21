@@ -19,4 +19,4 @@ putenv('FLAKY_SEED');
 --EXPECTF--
 Flaky Test Seed: 1234567890. To reproduce, run `FLAKY_SEED=1234567890 php artisan test --filter ...`
 
-%a
+PHPUnit %a
