@@ -125,10 +125,6 @@ jobs:
 
           - phpunit-version: "12.0.0"
             php-version: "8.5"
-            dependencies: "lowest"
-
-          - phpunit-version: "12.0.0"
-            php-version: "8.5"
             dependencies: "highest"
 
           # Paratest tests (only for latest PHP and PHPUnit versions)
@@ -213,16 +209,6 @@ jobs:
             pest-version: "3.0.0"
 
           - php-version: "8.4"
-            dependencies: "highest"
-            runner: "pest"
-            pest-version: "3.0.0"
-
-          - php-version: "8.5"
-            dependencies: "lowest"
-            runner: "pest"
-            pest-version: "3.0.0"
-
-          - php-version: "8.5"
             dependencies: "highest"
             runner: "pest"
             pest-version: "3.0.0"

@@ -11,7 +11,7 @@ This package provides a PHPUnit extension that helps reproduce flaky tests by se
 ## Compatibility
 
 This package is compatible with the following versions of PHP and PHPUnit:
-- **PHP :** `^8.1 || ^8.2 || ^8.3 || ^8.4`
+- **PHP :** `^8.1 || ^8.2 || ^8.3 || ^8.4 || ^8.5`
 - **PHPUnit :** `^10.0 || ^11.0 || ^12.0`
 
 It has been tested with the following versions of popular tools that wrap PHPUnit:
