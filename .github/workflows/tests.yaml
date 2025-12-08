@@ -23,7 +23,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: "none"
-          php-version: "8.4"
+          php-version: "8.5"
 
       - name: "Validate composer.json and composer.lock"
         run: "composer validate --ansi --strict"
@@ -123,15 +123,23 @@ jobs:
             php-version: "8.4"
             dependencies: "highest"
 
+          - phpunit-version: "12.0.0"
+            php-version: "8.5"
+            dependencies: "lowest"
+
+          - phpunit-version: "12.0.0"
+            php-version: "8.5"
+            dependencies: "highest"
+
           # Paratest tests (only for latest PHP and PHPUnit versions)
           # https://github.com/paratestphp/paratest?tab=readme-ov-file#versions
           - phpunit-version: "12.0.0"
-            php-version: "8.4"
+            php-version: "8.5"
             dependencies: "lowest"
             runner: "paratest"
 
           - phpunit-version: "12.0.0"
-            php-version: "8.4"
+            php-version: "8.5"
             dependencies: "highest"
             runner: "paratest"
 
@@ -209,6 +217,16 @@ jobs:
             runner: "pest"
             pest-version: "3.0.0"
 
+          - php-version: "8.5"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
+          - php-version: "8.5"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "3.0.0"
+
           # Pest 4 tests
           - php-version: "8.3"
             dependencies: "lowest"
@@ -226,6 +244,16 @@ jobs:
             pest-version: "4.0.0"
 
           - php-version: "8.4"
+            dependencies: "highest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
+          - php-version: "8.5"
+            dependencies: "lowest"
+            runner: "pest"
+            pest-version: "4.0.0"
+
+          - php-version: "8.5"
             dependencies: "highest"
             runner: "pest"
             pest-version: "4.0.0"
